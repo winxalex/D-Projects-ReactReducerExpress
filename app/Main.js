@@ -1,5 +1,5 @@
 import React from 'react'
-import Store from '../app/store/Store'
+import Store, { StoreContext } from '../app/store/Store'
 import DashboardConsumer from './components/Dashboard'
 
 
