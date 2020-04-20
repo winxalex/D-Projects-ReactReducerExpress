@@ -40,7 +40,7 @@ export const Dashboard = ({ groups, component: Component }) => (
         <h2>Dashboard</h2>
         {
             groups.map((group) => (
-                <Component key={group.id} name={group.name} id={group.id} />
+                <Component key={group.id} group={group} />
             ))
         }
     </div>
