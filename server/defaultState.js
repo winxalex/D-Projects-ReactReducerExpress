@@ -38,12 +38,6 @@ export const defaultState = {
         owner: "U1",
         isComplete: true,
     }, {
-        name: "Compile ES6",
-        id: "T3",
-        group: "G2",
-        owner: "U2",
-        isComplete: false,
-    }, {
         name: "Update component snapshots",
         id: "T4",
         group: "G2",

@@ -1,5 +1,5 @@
 import React, { useReducer } from 'react'
-import { BehaviorSubject } from 'rxjs'
+import { BehaviorSubject, isObservable } from 'rxjs'
 import { useState, useEffect } from 'react'
 import { skip } from 'rxjs/operators'
 
@@ -8,21 +8,35 @@ import { skip } from 'rxjs/operators'
 
 export const StoreContext = React.createContext();
 
-
-export default function Store({ subject, children }) {
-
-    const [state, setState] = useState(subject.getValue())
+const subject = new BehaviorSubject(null);
 
 
+export default function Store({ reducer, children }) {
 
+
+    //console.log(reducer.initialState);
+    const [state, setState] = useState(reducer.initialState);
+
+    console.log(state);
 
     useEffect(() => {
-        const sub = subject.pipe(skip(1)).subscribe(s => setState(s))
-        return () => sub.unsubscribe()
+        const sub = subject.pipe(skip(1)).subscribe(s => setState(s));
+        return () => sub.unsubscribe();
     }, [])
 
-    const dispatch = () => {
+    const apply = (f, ...args) => {
 
+        const o = f.apply(state, args);
+        const p = Promise.resolve(o);
+
+        if (p == o) {
+            console.log("promise");
+            p.then(v => subject.next(v));
+        } else if (isObservable(o)) {
+            o.subscribe(v => subject.next(v));
+        } else
+
+            subject.next(o);
     }
 
 
@@ -30,7 +44,8 @@ export default function Store({ subject, children }) {
 
     return (
 
-        <StoreContext.Provider value={{ getState: () => state, getSubject: () => subject }}>
+
+        <StoreContext.Provider value={{ apply: apply, reducer, getState: () => state, getSubject: () => subject }}>
             {
                 children
             }
