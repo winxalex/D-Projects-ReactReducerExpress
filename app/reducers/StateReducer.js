@@ -11,6 +11,8 @@ export const StateReducer = {
     //     return this;
     // }
 
+
+    //v1 asyc/await return Promise
     // setSession: async function () {
     //     console.log("startSession");
     //     let response = await fetch('https://jsonplaceholder.typicode.com/todos/1');
@@ -31,6 +33,7 @@ export const StateReducer = {
     // }
 
 
+    //v2 ajax rxjs return Observable
     setSession() {
 
 
@@ -56,52 +59,38 @@ export const StateReducer = {
             })
         );
 
-        return ajax.getJSON('https://jsonplaceholder.typicode.com/todos/1').pipe(map(v => v
-        )
-
-        );
 
 
-        // return ajax.getJSON('https://jsonplaceholder.typicode.com/todos/1').pipe(
-        //     map(userResponse => console.log('users: ', userResponse))
-        // ).
 
-        //     catchError(error => {
-        //         console.log('error: ', error);
-        //         return of(error);
-        //     });
+    },
+
+
+
+
+    //v3 fetch/then return Promise
+    setSession2() {
+
+        console.log("start Session");
+        return fetch('https://jsonplaceholder.typicode.com/todos/1')
+            .then(response => response.json())
+            .then(json => {
+                return {
+                    ...this, tasks: [
+                        ...this.tasks, {
+                            name: "Compile ES6",
+                            id: "T3",
+                            group: "G2",
+                            owner: "U2",
+                            isComplete: false,
+                        }
+                    ]
+                }, error => console.log(error);
+            }
+
+            ).catch(error => console.log(error));
+
 
     }
-
-
-
-
-
-    // setSession() {
-
-    //     console.log("start Session");
-    //     fetch('https://jsonplaceholder.typicode.com/todos/1')
-    //         .then(response => response.json())
-    //         .then(json => {
-    //             return {
-    //                 ...this, tasks: [
-    //                     ...this.tasks, {
-    //                         name: "Compile ES6",
-    //                         id: "T3",
-    //                         group: "G2",
-    //                         owner: "U2",
-    //                         isComplete: false,
-    //                     }
-    //                 ]
-    //             }
-    //         }
-
-    //         );
-
-
-    //     console.log("end Session");
-    //     return this;
-    // }
 }
 
 
